@@ -81,7 +81,7 @@ export default function HeroSearch() {
     <section className="relative w-full h-[500px]">
       {/* Background image */}
       <img
-        src="/hero-bg.jpg"
+        src="/bg.jpg"
         alt="Hero background"
         className="absolute inset-0 w-full h-full object-cover"
       />
