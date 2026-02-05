@@ -91,12 +91,12 @@ export default function HeroSearch() {
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full px-4">
-        <h1 className="text-4xl md:text-6xl font-bold text-white mb-8 text-center">
+        <h1 className="text-4xl md:text-6xl mt-15 font-bold text-white mb-8 text-center">
           Find Your Dream Job
         </h1>
 
         {/* Search bar */}
-        <form className="w-full max-w-6xl rounded-lg p-4 flex flex-col md:flex-row gap-4 shadow-lg bg-white dark:bg-gray-800">
+        <form className="w-full mt-65 max-w-6xl rounded-lg p-4 flex flex-col md:flex-row gap-4 shadow-lg bg-white dark:bg-gray-800">
           {/* Keyword input */}
           <Input
             placeholder="Search jobs..."
