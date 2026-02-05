@@ -9,4 +9,7 @@ export const dbConfig = {
   password: process.env.REDIS_PASSWORD! || 'password',
   db: process.env.REDIS_DB! ? Number(process.env.REDIS_DB!) : 0,
   db_rul: process.env.DATABASE_URL!,
+  access_secret: process.env.ACCESS_SECRET! || 'super-secret-access-key',
+  gmail_user: process.env.GMAIL_USER!,
+  gmail_password: process.env.GMAIL_APP_PASSWORD!,
 };

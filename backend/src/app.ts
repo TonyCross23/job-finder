@@ -5,7 +5,7 @@ import compression from 'compression';
 import { errorHandler } from './middlewares/appError.js';
 import healthRouter from './route/healthy.js';
 import { morganMiddleware } from './middlewares/logger.js';
-import { apiLimiter } from './middlewares/rateLimiter.js';
+import router from './route/rootRout.js';
 
 const app = express();
 
@@ -21,12 +21,12 @@ app.use(express.json());
 // URL encoded parser
 app.use(express.urlencoded({ extended: true }));
 
-app.use(apiLimiter);
 
 // Morgan → Pino → Winston
 app.use(morganMiddleware);
 
 app.use(healthRouter);
+app.use('/api/v1', router);
 
 // errorHandler
 app.use(errorHandler);
