@@ -1,13 +1,14 @@
-import { CreateUserDTO } from './dto/auth.dto.js';
-import { AuthTokensDTO } from './dto/auth.response.dto.js';
-import { IAuthService } from './useCase/auth.service.interface.js';
 import bcrypt from 'bcrypt';
-import { IAuthRepository } from './useCase/interface/auth.repository.interface.js';
-import { signAccessToken } from '../../utils/jwt.js';
 import crypto from 'crypto';
-import { AppError } from '../../errors/httpErrors.js';
-import { sendEmail } from '../../utils/email.js';
-import { ResetPasswordDTO } from './dto/forgot-password.dto.js';
+import { IAuthService } from './auth.service.interface';
+import { IAuthRepository } from '../infrastructure/auth.repository.interface';
+import { AppError } from '../../../errors/httpErrors';
+import { sendEmail } from '../../../utils/email';
+import { CreateUserDTO } from '../dto/auth.dto';
+import { AuthTokensDTO } from '../dto/auth.response.dto';
+import { ResetPasswordDTO } from '../dto/forgot-password.dto';
+import { signAccessToken } from '../../../utils/jwt';
+
 
 export class AuthService implements IAuthService {
   constructor(private repo: IAuthRepository) {}

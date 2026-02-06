@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import { container } from './container.js';
-import { validation } from '../../middlewares/validation.middleware.js';
-import { RegisterSchema } from '../../schemas/auth/regitst.validation.js';
-import { ResetPasswordSchema } from '../../schemas/auth/reset.validation.js';
-import { ForgotSchema } from '../../schemas/auth/forgot.validation.js';
-import { authLimiter } from '../../middlewares/authRateLimit.js';
+import { container } from './container';
+import { validation } from '../../middlewares/validation.middleware';
+import { RegisterSchema } from '../../schemas/auth/regitst.validation';
+import { ResetPasswordSchema } from '../../schemas/auth/reset.validation';
+import { ForgotSchema } from '../../schemas/auth/forgot.validation';
+import { authLimiter } from '../../middlewares/authRateLimit';
 
 const authRoute = Router();
 const { authController, authMiddleware } = container;

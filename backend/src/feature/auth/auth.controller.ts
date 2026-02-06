@@ -1,16 +1,10 @@
-import catchAsync from '../../config/catchAsync.js';
-import { HTTP_STATUS } from '../../config/httpStatusCode.js';
-import { IAuthService } from './useCase/auth.service.interface.js';
+import catchAsync from '../../config/catchAsync';
+import { HTTP_STATUS } from '../../config/httpStatusCode';
+import { IAuthService } from './useCase/auth.service.interface';
 import { Request, Response } from 'express';
 
 export class AuthController {
   constructor(private service: IAuthService) {}
-
-  //   register = catchAsync(async (req: Request, res: Response) => {
-  //     const { email, password, username, roleId } = req.body;
-  //     const result = await this.service.register({ email, password, username, roleId });
-  //     res.status(HTTP_STATUS.CREATED).json(result);
-  //   });
 
   sendCode = catchAsync(async (req: Request, res: Response) => {
     const { email } = req.body;

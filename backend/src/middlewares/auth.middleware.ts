@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { IAuthRepository } from '../feature/auth/useCase/interface/auth.repository.interface.js';
-import { signAccessToken, verifyAccessToken } from '../utils/jwt.js';
+import { IAuthRepository } from '../feature/auth/infrastructure/auth.repository.interface';
+import { signAccessToken, verifyAccessToken } from '../utils/jwt';
 
 export class AuthMiddleware {
   constructor(private authRepo: IAuthRepository) {}

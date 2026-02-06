@@ -1,8 +1,8 @@
-import { prisma } from '../../database/prisma.js';
-import { AuthMiddleware } from '../../middlewares/auth.middleware.js';
-import { AuthController } from './auth.controller.js';
-import { AuthService } from './auth.service.js';
-import { AuthRepository } from './useCase/interface/auth.repository.js';
+import { prisma } from '../../database/prisma';
+import { AuthMiddleware } from '../../middlewares/auth.middleware';
+import { AuthController } from './auth.controller';
+import { AuthRepository } from './infrastructure/auth.repository';
+import { AuthService } from './useCase/auth.service';
 
 const authRepository = new AuthRepository(prisma);
 const authService = new AuthService(authRepository);

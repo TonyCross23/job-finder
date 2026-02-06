@@ -1,6 +1,6 @@
-import { CreateUserDTO } from '../dto/auth.dto.js';
-import { AuthTokensDTO } from '../dto/auth.response.dto.js';
-import { ResetPasswordDTO } from '../dto/forgot-password.dto.js';
+import { CreateUserDTO } from '../dto/auth.dto';
+import { AuthTokensDTO } from '../dto/auth.response.dto';
+import { ResetPasswordDTO } from '../dto/forgot-password.dto';
 
 export interface IAuthService {
   login(email: string, password: string): Promise<AuthTokensDTO>;

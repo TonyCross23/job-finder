@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
-import { dbConfig } from '../config/db.js';
+import { dbConfig } from '../config/db';
 
 export const signAccessToken = (userId: string): string => {
   return jwt.sign({ userId }, dbConfig.access_secret, { expiresIn: '15m' });

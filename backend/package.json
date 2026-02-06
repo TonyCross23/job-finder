@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "dev": "tsx watch --env-file .env src/server.ts",
     "build": "tsc",
@@ -12,7 +12,7 @@
     "lint:fix": "eslint 'src/**/*.{ts,js}' --fix",
     "format": "prettier --write 'src/**/*.{ts,js,json,md}'",
     "format:check": "prettier --check 'src/**/*.{ts,js,json,md}'",
-    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --config jest.config.cjs --no-cache"
+    "test": "jest"
   },
   "keywords": [],
   "author": "",

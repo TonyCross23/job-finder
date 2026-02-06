@@ -1,7 +1,7 @@
-import { AppError } from '../../../../errors/httpErrors.js';
-import { PrismaClient } from '../../../../generated/prisma/client.js';
-import { CreateUserDTO, UserDTO, RefreshTokenDTO } from '../../dto/auth.dto.js';
-import { IAuthRepository } from './auth.repository.interface.js';
+import { AppError } from '../../../errors/httpErrors';
+import { PrismaClient } from '../../../generated/prisma/client';
+import { CreateUserDTO, UserDTO, RefreshTokenDTO } from '../dto/auth.dto';
+import { IAuthRepository } from './auth.repository.interface';
 
 interface MemoryEmailCode {
   code: string;

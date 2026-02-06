@@ -1,4 +1,4 @@
-import { CreateUserDTO, RefreshTokenDTO, UserDTO } from '../../dto/auth.dto.js';
+import { CreateUserDTO, RefreshTokenDTO, UserDTO } from '../dto/auth.dto';
 
 export interface IAuthRepository {
   createUser(data: CreateUserDTO): Promise<UserDTO>;

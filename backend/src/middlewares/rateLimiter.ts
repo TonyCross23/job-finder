@@ -1,6 +1,6 @@
 import rateLimit from 'express-rate-limit';
 import RedisStore from 'rate-limit-redis';
-import { redisClient } from '../utils/redis.js';
+import { redisClient } from '../utils/redis';
 
 export const apiLimiter = rateLimit({
   store: new RedisStore({
