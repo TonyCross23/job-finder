@@ -1,7 +1,7 @@
-import app from './app.js';
+import app from './app';
 import http from 'http';
-import { logger } from './middlewares/logger.js';
-import { dbConfig } from './config/db.js';
+import { logger } from './middlewares/logger';
+import { dbConfig } from './config/db';
 
 const PORT = dbConfig.hport;
 

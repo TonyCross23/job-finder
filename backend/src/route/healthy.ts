@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { apiLimiter } from '../middlewares/rateLimiter.js';
+import { apiLimiter } from '../middlewares/rateLimiter';
 
 const healthRouter = Router();
 

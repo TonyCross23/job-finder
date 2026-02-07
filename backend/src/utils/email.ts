@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { dbConfig } from '../config/db.js';
+import { dbConfig } from '../config/db';
 
 export async function sendEmail({
   to,

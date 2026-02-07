@@ -1,9 +1,9 @@
 import { JobCard } from "./JobCard"
 
 const highlightJobs = [
-    { id: 1, title: "Senior React Developer", company: "TechNova", location: "Remote", type: "Full Time", logo: "https://via.placeholder.com/40" },
-    { id: 2, title: "UI/UX Designer", company: "Designify", location: "New York, USA", type: "Contract", logo: "https://via.placeholder.com/40" },
-    { id: 3, title: "Backend Engineer", company: "CloudCore", location: "Berlin, Germany", type: "Full Time", logo: "https://via.placeholder.com/40" },
+    { id: 1, title: "Senior React Developer", company: "TechNova", location: "Remote", type: "Full Time", logo: "hello" },
+    { id: 2, title: "UI/UX Designer", company: "Designify", location: "New York, USA", type: "Contract", logo: "hello" },
+    { id: 3, title: "Backend Engineer", company: "CloudCore", location: "Berlin, Germany", type: "Full Time", logo: "hello" },
 ]
 
 export function HighlightJobs() {

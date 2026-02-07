@@ -3,5 +3,5 @@ export const emailUtils = {
     // မင်းရဲ့ မူလ Nodemailer logic တွေကို ဒီထဲမှာ ထည့်ပါ
     console.log(`Sending email to ${to}`);
     return { messageId: 'test-id' };
-  }
+  },
 };

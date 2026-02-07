@@ -3,7 +3,7 @@ import HeroSearch from "@/components/HeroSearch"
 import { HighlightJobs } from "@/components/HightlightJobs"
 import { SpotlightJobs } from "@/components/SpotlightJobs"
 
-const Home = () => {
+const HomePage = () => {
   return (
     <div>
         <HeroSearch/>
@@ -19,4 +19,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default HomePage

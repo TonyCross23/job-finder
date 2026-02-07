@@ -4,12 +4,12 @@ import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
 const spotlightJobs = [
-  { id: 101, title: "Lead Frontend Engineer", company: "Spotlight Inc", location: "Remote", type: "Full Time", logo: "https://via.placeholder.com/40" },
-  { id: 102, title: "Product Designer", company: "Bright Labs", location: "Singapore", type: "Contract", logo: "https://via.placeholder.com/40" },
-  { id: 103, title: "Senior Backend Engineer", company: "CloudCore", location: "Berlin, Germany", type: "Full Time", logo: "https://via.placeholder.com/40" },
-  { id: 104, title: "Lead Frontend Engineer", company: "Spotlight Inc", location: "Remote", type: "Full Time", logo: "https://via.placeholder.com/40" },
-  { id: 105, title: "Product Designer", company: "Bright Labs", location: "Singapore", type: "Contract", logo: "https://via.placeholder.com/40" },
-  { id: 106, title: "Senior Backend Engineer", company: "CloudCore", location: "Berlin, Germany", type: "Full Time", logo: "https://via.placeholder.com/40" },
+  { id: 101, title: "Lead Frontend Engineer", company: "Spotlight Inc", location: "Remote", type: "Full Time", logo: "hello" },
+  { id: 102, title: "Product Designer", company: "Bright Labs", location: "Singapore", type: "Contract", logo: "hello" },
+  { id: 103, title: "Senior Backend Engineer", company: "CloudCore", location: "Berlin, Germany", type: "Full Time", logo: "hello" },
+  { id: 104, title: "Lead Frontend Engineer", company: "Spotlight Inc", location: "Remote", type: "Full Time", logo: "hello" },
+  { id: 105, title: "Product Designer", company: "Bright Labs", location: "Singapore", type: "Contract", logo: "hello" },
+  { id: 106, title: "Senior Backend Engineer", company: "CloudCore", location: "Berlin, Germany", type: "Full Time", logo: "hello" },
 ]
 
 export function SpotlightJobs() {
