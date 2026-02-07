@@ -5,7 +5,7 @@ import app from "../app";
 describe("Auth API Status Code Comprehensive Testing", () => {
     
     const testUser = {
-        email: "tony.test@gmail.com",
+        email: "tonytest@gmail.com",
         username: "tony_dev",
         password: "SafePassword123!",
         roleId: 1
@@ -66,15 +66,6 @@ describe("Auth API Status Code Comprehensive Testing", () => {
 
             expect(res.status).toBe(404); // [ERROR: 404 Not Found]
             expect(res.body.message).toBe("Email not found");
-        });
-    });
-
-    // --- 500 Internal Server Error (Mocking a crash) ---
-    describe("Unexpected Server Errors", () => {
-        it("should return 500 if something crashes internally", async () => {
-            // ဒီနေရာမှာ database ကို ခဏပိတ်လိုက်တာမျိုး ဒါမှမဟုတ် 
-            // service ကို mock လုပ်ပြီး error ပစ်ခိုင်းလိုက်ရင် 500 ထွက်လာပါလိမ့်မယ်
-            // လက်ရှိ မင်းရဲ့ error handler (catchAsync) က ဒါကို handle လုပ်ပေးမှာပါ
         });
     });
 });

@@ -5,14 +5,14 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "dev": "tsx watch --env-file .env src/server.ts",
+    "dev": "tsx watch --clear-screen=false --env-file .env src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
     "lint": "eslint 'src/**/*.{ts,js}'",
     "lint:fix": "eslint 'src/**/*.{ts,js}' --fix",
     "format": "prettier --write 'src/**/*.{ts,js,json,md}'",
     "format:check": "prettier --check 'src/**/*.{ts,js,json,md}'",
-    "test": "jest"
+    "test": "NODE_ENV=test jest --silent --noStackTrace --forceExit"
   },
   "keywords": [],
   "author": "",

@@ -5,9 +5,10 @@ import { RegisterSchema } from '../../schemas/auth/regitst.validation';
 import { ResetPasswordSchema } from '../../schemas/auth/reset.validation';
 import { ForgotSchema } from '../../schemas/auth/forgot.validation';
 import { authLimiter } from '../../middlewares/authRateLimit';
+import { authMiddleware } from '../../middlewares/auth.middleware';
 
 const authRoute = Router();
-const { authController, authMiddleware } = container;
+const { authController } = container;
 
 authRoute.post('/code', authController.sendCode);
 authRoute.post('/register', authLimiter, validation(RegisterSchema), authController.register);

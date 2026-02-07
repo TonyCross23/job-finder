@@ -30,7 +30,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const login = async (data: any) => {
         const res = await loginAPI(data);
         localStorage.setItem('accessToken', res.data.accessToken);
-        localStorage.setItem('refreshToken', res.data.refreshToken);
         localStorage.setItem('userEmail', data.email); // save email
         setUser(data.email);
     };
@@ -38,7 +37,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const logout = async () => {
         await logoutAPI();
         localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
         localStorage.removeItem('userEmail'); // remove email
         setUser(null);
     };

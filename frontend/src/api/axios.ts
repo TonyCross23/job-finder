@@ -36,21 +36,18 @@ api.interceptors.response.use(
             try {
                 const refreshToken = localStorage.getItem('refreshToken');
                 if (!refreshToken) throw new Error('No refresh token');
-                const { data } = await api.post(
-                    '/auth/refresh',
-                    {},
-                    { headers: { 'x-refresh-token': refreshToken } }
-                );
+                const { data } = await api.post('/auth/refresh');
 
                 localStorage.setItem('accessToken', data.accessToken);
 
                 processQueue(null, data.accessToken);
 
                 originalRequest.headers['Authorization'] = `Bearer ${data.accessToken}`;
-                
+
                 return axios(originalRequest);
             } catch (e) {
-                processQueue(e, null);
+                localStorage.clear();
+                window.location.href = '/login';
                 return Promise.reject(e);
             } finally {
                 isRefreshing = false;

@@ -7,9 +7,5 @@ import { AuthService } from './useCase/auth.service';
 const authRepository = new AuthRepository(prisma);
 const authService = new AuthService(authRepository);
 const authController = new AuthController(authService);
-const authMiddleware = new AuthMiddleware(authRepository);
 
-export const container = {
-  authController,
-  authMiddleware,
-};
+export const container = {authController,};

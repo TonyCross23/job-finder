@@ -1,16 +1,16 @@
+// src/middlewares/auth.middleware.ts
 import { Request, Response, NextFunction } from 'express';
-import { IAuthRepository } from '../feature/auth/infrastructure/auth.repository.interface';
-import { signAccessToken, verifyAccessToken } from '../utils/jwt';
+import { verifyAccessToken } from '../utils/jwt';
+import { HTTP_STATUS } from '../config/httpStatusCode';
 
 export class AuthMiddleware {
-  constructor(private authRepo: IAuthRepository) {}
 
   authenticate = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const authHeader = req.headers.authorization;
     const accessToken = authHeader?.split(' ')[1];
 
     if (!accessToken) {
-      res.status(401).json({ message: 'No access token' });
+      res.status(HTTP_STATUS.UNAUTHORIZED).json({ message: 'No access token' });
       return;
     }
 
@@ -19,30 +19,8 @@ export class AuthMiddleware {
       req.userId = payload.userId;
       return next();
     } catch (err: any) {
-      if (err.name !== 'TokenExpiredError') {
-        res.status(401).json({ message: 'Invalid token' });
-        return;
-      }
-
-      // access token expired → try refresh
-      const refreshToken = req.headers['x-refresh-token'] as string;
-      if (!refreshToken) {
-        res.status(401).json({ message: 'No refresh token' });
-        return;
-      }
-
-      const stored = await this.authRepo.findRefreshToken(refreshToken);
-      if (!stored || stored.expiresAt < new Date()) {
-        res.status(401).json({ message: 'Invalid refresh token' });
-        return;
-      }
-
-      const newAccessToken = signAccessToken(stored.userId);
-
-      res.setHeader('x-access-token', newAccessToken);
-      req.userId = stored.userId;
-
-      return next();
+      res.status(HTTP_STATUS.UNAUTHORIZED).json({ message: 'Access token expired or invalid' });
     }
   };
 }
+export const authMiddleware = new AuthMiddleware();

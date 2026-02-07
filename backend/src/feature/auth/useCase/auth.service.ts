@@ -11,7 +11,7 @@ import { signAccessToken } from '../../../utils/jwt';
 
 
 export class AuthService implements IAuthService {
-  constructor(private repo: IAuthRepository) {}
+  constructor(private repo: IAuthRepository) { }
   async sendVerificationCode(email: string): Promise<{ message: string }> {
     const existingUser = await this.repo.findUserByEmail(email);
     if (existingUser) throw new AppError('Email already registered', 409);
@@ -28,7 +28,7 @@ export class AuthService implements IAuthService {
     });
     return { message: 'Verification code sent to your email' };
   }
-  async registerWithCode(dto: CreateUserDTO, code: string): Promise<AuthTokensDTO> {
+  async registerWithCode(dto: CreateUserDTO, code: string, device: string): Promise<AuthTokensDTO> {
     const savedCode = await this.repo.getEmailCode(dto.email);
     if (!savedCode || savedCode !== code)
       throw new AppError('Invalid or expired verification code', 400);
@@ -38,7 +38,7 @@ export class AuthService implements IAuthService {
 
     await this.repo.deleteEmailCode(dto.email);
 
-    return this.issueTokens(user.id);
+    return this.issueTokens(user.id, device);
   }
 
   // async register(dto: CreateUserDTO): Promise<AuthTokensDTO> {
@@ -47,7 +47,7 @@ export class AuthService implements IAuthService {
   //     return this.issueTokens(user.id);
   // }
 
-  async login(email: string, password: string): Promise<AuthTokensDTO> {
+  async login(email: string, password: string, device: string): Promise<AuthTokensDTO> {
     const user = await this.repo.findUserByEmail(email);
     if (!user) {
       throw new AppError('Invalid credentials', 409);
@@ -58,15 +58,18 @@ export class AuthService implements IAuthService {
       throw new AppError('Invalid credentials', 409);
     }
 
-    return this.issueTokens(user.id);
+    return this.issueTokens(user.id, device);
   }
-  async refresh(token: string): Promise<AuthTokensDTO> {
+
+  async refresh(token: string, device: string): Promise<AuthTokensDTO> {
     const stored = await this.repo.findRefreshToken(token);
     if (!stored || stored.expiresAt < new Date()) {
       throw new AppError('Invalid refresh token', 400);
     }
+    
+    await this.repo.deleteRefreshToken(token);
 
-    return this.issueTokens(stored.userId);
+    return this.issueTokens(stored.userId, device);
   }
 
   async loguot(token: string): Promise<void> {
@@ -112,14 +115,14 @@ export class AuthService implements IAuthService {
     return { message: 'Password reset successfully' };
   }
 
-  private async issueTokens(userId: string): Promise<AuthTokensDTO> {
+  private async issueTokens(userId: string, device: string): Promise<AuthTokensDTO> {
     const accessToken = signAccessToken(userId);
     const refreshToken = crypto.randomBytes(32).toString('hex');
 
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 7);
 
-    await this.repo.saveRefreshToken(userId, refreshToken, expiresAt);
+    await this.repo.saveRefreshToken(userId, device, refreshToken, expiresAt);
     await this.repo.deleteExpiredTokens(userId, refreshToken);
 
     return { accessToken, refreshToken };

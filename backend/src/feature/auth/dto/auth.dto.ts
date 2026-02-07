@@ -9,6 +9,7 @@ export interface UserDTO {
 
 export interface RefreshTokenDTO {
   id: string;
+  device: string;
   token: string;
   userId: string;
   expiresAt: Date;

@@ -18,7 +18,7 @@ const resetCodes: Record<string, ResetCode> = {};
 const emailCodes: Record<string, MemoryEmailCode> = {};
 
 export class AuthRepository implements IAuthRepository {
-  constructor(private prisma: PrismaClient) {}
+  constructor(private prisma: PrismaClient) { }
 
   async saveEmailCode(email: string, code: string, expiresAt: Date): Promise<void> {
     emailCodes[email] = { code, expiresAt };
@@ -61,7 +61,11 @@ export class AuthRepository implements IAuthRepository {
     }
   }
   async findUserByEmail(email: string): Promise<UserDTO | null> {
-    const user = await this.prisma.user.findUnique({ where: { email } });
+    if (!email) {
+      console.error("findUserByEmail was called with an empty email");
+      return null;
+    }
+    const user = await this.prisma.user.findUnique({ where: { email: email } });
 
     if (!user) return null;
 
@@ -74,18 +78,19 @@ export class AuthRepository implements IAuthRepository {
       createdAt: user.createdAt,
     };
   }
-  async saveRefreshToken(userId: string, token: string, expiresAt: Date): Promise<void> {
-    await this.prisma.refreshToken.create({ data: { userId, token, expiresAt } });
+  async saveRefreshToken(userId: string, device: string, token: string, expiresAt: Date): Promise<void> {
+    await this.prisma.refreshToken.create({ data: { userId, device, token, expiresAt } });
   }
   async findRefreshToken(token: string): Promise<RefreshTokenDTO | null> {
-    const user = await this.prisma.refreshToken.findUnique({ where: { token } });
+    const user = await this.prisma.refreshToken.findUnique({ where: { token: token } });
     return user
-      ? { id: user.id, token: user.token, userId: user.userId, expiresAt: user.expiresAt }
+      ? { id: user.id, device: user.device, token: user.token, userId: user.userId, expiresAt: user.expiresAt }
       : null;
   }
   async deleteRefreshToken(token: string) {
     await this.prisma.refreshToken.deleteMany({ where: { token } });
   }
+
   async deleteExpiredTokens(userId: string, exceptToken: string): Promise<void> {
     await this.prisma.refreshToken.deleteMany({
       where: { userId, token: { not: exceptToken }, expiresAt: { lt: new Date() } },
