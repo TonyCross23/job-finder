@@ -3,7 +3,8 @@ import { CreateUserDTO, RefreshTokenDTO, UserDTO } from '../dto/auth.dto';
 export interface IAuthRepository {
   createUser(data: CreateUserDTO): Promise<UserDTO>;
   findUserByEmail(email: string): Promise<UserDTO | null>;
-  saveRefreshToken(userId: string, device: string, token: string, expiresAt: Date): Promise<void>;
+  findUserById(id: string): Promise<UserDTO | null>;
+  saveRefreshToken(id: string, device: string, token: string, expiresAt: Date): Promise<void>;
   saveEmailCode(email: string, code: string, expiresAt: Date): Promise<void>;
   getEmailCode(email: string): Promise<string | null>;
   deleteEmailCode(email: string): Promise<void>;

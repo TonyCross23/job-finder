@@ -14,6 +14,6 @@ redisClient.on('connect', () => logger.info('Redis connected'));
 redisClient.on('error', (err: Error) => logger.error('Redis Client Error', err));
 
 // Example usage
- redisClient.set('foo', 'bar');
+redisClient.set('foo', 'bar');
 const result = redisClient.get('foo');
 logger.info(result);

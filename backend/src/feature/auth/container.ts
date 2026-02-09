@@ -8,4 +8,4 @@ const authRepository = new AuthRepository(prisma);
 const authService = new AuthService(authRepository);
 const authController = new AuthController(authService);
 
-export const container = {authController,};
+export const container = { authController };

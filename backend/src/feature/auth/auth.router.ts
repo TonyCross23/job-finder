@@ -29,8 +29,11 @@ authRoute.post(
 );
 
 authRoute.get('/me', authMiddleware.authenticate, (req, res) => {
-  console.log(req.userId);
-  res.json({ userId: req.userId });
+  res.json({
+    id: req.id,
+    name: req.userName,
+    email: req.userEmail
+  });
 });
 
 export default authRoute;

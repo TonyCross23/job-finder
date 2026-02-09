@@ -5,6 +5,6 @@ import locationRoute from '../feature/location/location.router';
 const router = Router();
 
 router.use('/auth', authRoute);
-router.use("/location", locationRoute)
+router.use('/location', locationRoute);
 
 export default router;

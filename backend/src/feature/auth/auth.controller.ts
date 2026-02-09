@@ -5,10 +5,10 @@ import { IAuthService } from './useCase/auth.service.interface';
 import { Request, Response } from 'express';
 
 export class AuthController {
-  constructor(private service: IAuthService) { }
+  constructor(private service: IAuthService) {}
 
   sendCode = catchAsync(async (req: Request, res: Response) => {
-    console.log("DEBUG: Request Body is", req.body);
+    console.log('DEBUG: Request Body is', req.body);
     const { email } = req.body;
     const device = req.headers['user-agent'] || 'unknown device';
     const result = await this.service.sendVerificationCode(email, device);
@@ -19,7 +19,11 @@ export class AuthController {
     const { email, username, password, roleId, code } = req.body;
     const device = req.headers['user-agent'] || 'unknown device';
 
-    const result = await this.service.registerWithCode({ email, username, password, roleId }, code, device);
+    const result = await this.service.registerWithCode(
+      { email, username, password, roleId },
+      code,
+      device,
+    );
     res.status(HTTP_STATUS.CREATED).json(result);
   });
 
@@ -31,7 +35,7 @@ export class AuthController {
   });
 
   refresh = catchAsync(async (req: Request, res: Response) => {
-    console.log('refresh', req.body)
+    console.log('refresh', req.body);
     const { refreshToken } = req.body;
     const device = req.headers['user-agent'] || 'unknown device';
     if (!refreshToken) throw new AppError('Refresh token required', 400);

@@ -9,7 +9,6 @@ import { AuthTokensDTO } from '../dto/auth.response.dto';
 import { ResetPasswordDTO } from '../dto/forgot-password.dto';
 import { signAccessToken } from '../../../utils/jwt';
 
-
 export class AuthService implements IAuthService {
   constructor(private repo: IAuthRepository) { }
   async sendVerificationCode(email: string): Promise<{ message: string }> {
@@ -66,7 +65,7 @@ export class AuthService implements IAuthService {
     if (!stored || stored.expiresAt < new Date()) {
       throw new AppError('Invalid refresh token', 400);
     }
-    
+
     await this.repo.deleteRefreshToken(token);
 
     return this.issueTokens(stored.userId, device);
@@ -116,7 +115,14 @@ export class AuthService implements IAuthService {
   }
 
   private async issueTokens(userId: string, device: string): Promise<AuthTokensDTO> {
-    const accessToken = signAccessToken(userId);
+    const user = await this.repo.findUserById(userId);
+
+    if (!user) throw new AppError('User not found', 404);
+    const accessToken = signAccessToken({
+      id: user.id,
+      name: user.username,
+      email: user.email
+    });
     const refreshToken = crypto.randomBytes(32).toString('hex');
 
     const expiresAt = new Date();

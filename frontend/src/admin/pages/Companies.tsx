@@ -1,0 +1,1 @@
+export const Companies = () => <div className='p-4 md:ml-64 mt-20'>Companies Page</div>;

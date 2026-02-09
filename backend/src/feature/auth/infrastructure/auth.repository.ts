@@ -1,5 +1,6 @@
 import { AppError } from '../../../errors/httpErrors';
 import { PrismaClient } from '../../../generated/prisma/client';
+import { redisClient } from '../../../utils/redis';
 import { CreateUserDTO, UserDTO, RefreshTokenDTO } from '../dto/auth.dto';
 import { IAuthRepository } from './auth.repository.interface';
 
@@ -21,13 +22,11 @@ export class AuthRepository implements IAuthRepository {
   constructor(private prisma: PrismaClient) { }
 
   async saveEmailCode(email: string, code: string, expiresAt: Date): Promise<void> {
-    emailCodes[email] = { code, expiresAt };
+    const ttl = Math.floor((expiresAt.getTime() - Date.now()) / 1000);
+    await redisClient.set(`email_code:${email}`, code, 'EX', ttl);
   }
   async getEmailCode(email: string): Promise<string | null> {
-    const record = emailCodes[email];
-    if (!record) return null;
-    if (record.expiresAt < new Date()) return null;
-    return record.code;
+    return await redisClient.get(`email_code:${email}`);
   }
 
   async deleteEmailCode(email: string): Promise<void> {
@@ -60,9 +59,22 @@ export class AuthRepository implements IAuthRepository {
       throw err;
     }
   }
+  async findUserById(id: string): Promise<UserDTO | null> {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+
+    if (!user) return null;
+
+    return {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      password: user.password,
+      roleId: user.roleId,
+      createdAt: user.createdAt,
+    };
+  }
   async findUserByEmail(email: string): Promise<UserDTO | null> {
     if (!email) {
-      console.error("findUserByEmail was called with an empty email");
       return null;
     }
     const user = await this.prisma.user.findUnique({ where: { email: email } });
@@ -78,17 +90,47 @@ export class AuthRepository implements IAuthRepository {
       createdAt: user.createdAt,
     };
   }
-  async saveRefreshToken(userId: string, device: string, token: string, expiresAt: Date): Promise<void> {
+  async saveRefreshToken(
+    userId: string,
+    device: string,
+    token: string,
+    expiresAt: Date,
+  ): Promise<void> {
     await this.prisma.refreshToken.create({ data: { userId, device, token, expiresAt } });
+    const ttlSeconds = Math.floor((expiresAt.getTime() - Date.now()) / 1000);
+    if (ttlSeconds > 0) {
+      await redisClient.set(`refresh_token:${token}`, JSON.stringify({ userId, device }), 'EX', ttlSeconds);
+    }
   }
   async findRefreshToken(token: string): Promise<RefreshTokenDTO | null> {
-    const user = await this.prisma.refreshToken.findUnique({ where: { token: token } });
-    return user
-      ? { id: user.id, device: user.device, token: user.token, userId: user.userId, expiresAt: user.expiresAt }
-      : null;
+    // redis cache token
+    const cachedToken = await redisClient.get(`refresh_token:${token}`);
+    if (cachedToken) {
+      const parsed = JSON.parse(cachedToken);
+      return {
+        id: '', // redis not store id
+        token: token,
+        userId: parsed.userId,
+        device: parsed.device,
+        expiresAt: new Date(), // valid ttl
+      };
+    }
+    const dbToken = await this.prisma.refreshToken.findUnique({ where: { token } });
+    if (dbToken && dbToken.expiresAt > new Date()) {
+      return {
+        id: dbToken.id,
+        token: dbToken.token,
+        userId: dbToken.userId,
+        device: dbToken.device,
+        expiresAt: dbToken.expiresAt
+      };
+    }
+    return null;
   }
   async deleteRefreshToken(token: string) {
     await this.prisma.refreshToken.deleteMany({ where: { token } });
+    // delete redis cache token
+    await redisClient.del(`refresh_token:${token}`);
   }
 
   async deleteExpiredTokens(userId: string, exceptToken: string): Promise<void> {

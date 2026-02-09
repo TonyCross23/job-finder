@@ -1,0 +1,1 @@
+export const Applications = () => <div className='p-4 md:ml-64 mt-20'>Applications Page</div>;

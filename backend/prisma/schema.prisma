@@ -33,7 +33,7 @@ model User {
 
 model RefreshToken {
   id        String   @id @default(uuid())
-  device    String?   @default("unknown")
+  device    String   @default("unknown")
   token     String   @unique
   userId    String
   expiresAt DateTime

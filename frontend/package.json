@@ -29,6 +29,7 @@
     "react-hook-form": "^7.71.1",
     "react-router-dom": "^7.13.0",
     "react-slick": "^0.31.0",
+    "recharts": "2.15.4",
     "slick-carousel": "^1.8.1",
     "tailwind-merge": "^3.4.0",
     "zod": "^4.3.6",
