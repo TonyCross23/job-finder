@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import { dbConfig } from '../config/db';
+import { Response } from 'express';
 
 interface TokenPayload {
   id: string;
@@ -9,8 +10,18 @@ interface TokenPayload {
 }
 
 export const signAccessToken = (data: TokenPayload): string => {
-  return jwt.sign({ data }, dbConfig.access_secret, { expiresIn: '15m' });
+  return jwt.sign({ ...data }, dbConfig.access_secret, { expiresIn: '15m' });
 };
+
+export const setRefreshTokenCookie = (res: Response, refreshToken: string) => {
+  res.cookie('refreshToken', refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: "/",
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  });
+};  
 
 export const verifyAccessToken = (token: string): TokenPayload => {
   try {
@@ -41,6 +52,7 @@ export const verifyAccessToken = (token: string): TokenPayload => {
     throw error
   }
 };
+
 
 export const generateRefreshToken = (): string => {
   return crypto.randomBytes(32).toString('hex');

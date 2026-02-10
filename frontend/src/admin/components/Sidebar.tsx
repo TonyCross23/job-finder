@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { User, Briefcase, Building, FileText, BarChart2 } from "lucide-react";
+import { User, Briefcase, Building, FileText, BarChart2, LocateIcon } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -18,6 +18,7 @@ const navItems = [
   { name: "Jobs", path: "/admin/jobs", icon: Briefcase },
   { name: "Companies", path: "/admin/companies", icon: Building },
   { name: "Applications", path: "/admin/applications", icon: FileText },
+  { name: "Locations", path: "/admin/location", icon: LocateIcon },
 ];
 
 export function AppSidebar() {

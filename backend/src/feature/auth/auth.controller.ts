@@ -1,11 +1,12 @@
 import catchAsync from '../../config/catchAsync';
 import { HTTP_STATUS } from '../../config/httpStatusCode';
 import { AppError } from '../../errors/httpErrors';
+import { setRefreshTokenCookie } from '../../utils/jwt';
 import { IAuthService } from './useCase/auth.service.interface';
 import { Request, Response } from 'express';
 
 export class AuthController {
-  constructor(private service: IAuthService) {}
+  constructor(private service: IAuthService) { }
 
   sendCode = catchAsync(async (req: Request, res: Response) => {
     console.log('DEBUG: Request Body is', req.body);
@@ -31,17 +32,19 @@ export class AuthController {
     const { email, password } = req.body;
     const device = req.headers['user-agent'] || 'unknown device';
     const result = await this.service.login(email, password, device);
-    res.status(HTTP_STATUS.OK).json(result);
+    setRefreshTokenCookie(res, result.refreshToken);
+    res.status(HTTP_STATUS.OK).json({ acceptToken: result.accessToken });
   });
 
   refresh = catchAsync(async (req: Request, res: Response) => {
-    console.log('refresh', req.body);
-    const { refreshToken } = req.body;
+    const refreshToken = req.cookies.refreshToken;
+    console.log("refresh", refreshToken)
     const device = req.headers['user-agent'] || 'unknown device';
     if (!refreshToken) throw new AppError('Refresh token required', 400);
 
-    const token = await this.service.refresh(refreshToken, device);
-    res.status(HTTP_STATUS.OK).json(token);
+    const result = await this.service.refresh(refreshToken, device);
+    setRefreshTokenCookie(res, result.refreshToken);
+    res.status(HTTP_STATUS.OK).json({ acceptToken: result.accessToken });
   });
 
   logout = catchAsync(async (req: Request, res: Response) => {

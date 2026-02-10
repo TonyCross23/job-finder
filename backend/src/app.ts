@@ -7,6 +7,7 @@ import { errorHandler } from './middlewares/appError';
 import healthRouter from './route/healthy';
 import { morganMiddleware } from './middlewares/logger';
 import router from './route/rootRout';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
@@ -18,9 +19,9 @@ app.use(compression());
 
 app.use(
   cors({
-    origin: ['http://192.168.1.11:5173', 'http://localhost:5173'],
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    origin: 'http://localhost:5173',
+    credentials: true, 
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   }),
 );
@@ -30,6 +31,8 @@ app.use(express.json());
 
 // URL encoded parser
 app.use(express.urlencoded({ extended: true }));
+
+app.use(cookieParser())
 
 // Morgan → Pino → Winston
 app.use(morganMiddleware);

@@ -10,7 +10,6 @@ export const GuestRoute = ({ children }: GuestRouteProps) => {
     const { user } = useAuth();
 
     if (user) {
-        // logged in → home page ကို redirect
         return <Navigate to="/" replace />;
     }
 

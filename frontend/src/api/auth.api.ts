@@ -26,6 +26,5 @@ export const loginAPI = async (dto: LoginDTO) => {
 };
 
 export const logoutAPI = async () => {
-    const token = localStorage.getItem('refreshToken');
-    return await api.post('/auth/logout', { token });
+    return await api.post('/auth/logout', { });
 };

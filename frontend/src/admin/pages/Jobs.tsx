@@ -7,7 +7,6 @@ import {
   DollarSign,
   Users2,
   Tag,
-  Briefcase
 } from "lucide-react";
 import {
   Table,
@@ -50,15 +49,35 @@ import {
 export const Jobs = () => {
   const [open, setOpen] = useState(false);
 
+  // Form State Management
+  const [formData, setFormData] = useState({
+    title: "",
+    category: "",
+    jobType: "",
+    salary: "",
+    posts: "",
+    description: "",
+    requirements: "", // Requirement
+    address: ""
+  });
+
+  // Handle Form Submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Submitting Job Data:", formData);
+    
+    
+    setOpen(false);
+  };
+
   return (
-    <div className="flex flex-col gap-6">
-      {/* Header */}
+    <div className="flex flex-col gap-6 p-6">
+      {/* --- Header Section --- */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-foreground">Job Management</h1>
         </div>
 
-        {/* --- Post Job Dialog --- */}
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button className="gap-2 shadow-lg hover:shadow-primary/20">
@@ -66,87 +85,127 @@ export const Jobs = () => {
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[625px] max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>Create Job Posting</DialogTitle>
-              <DialogDescription>
-                အလုပ်ခေါ်စာအသစ်အတွက် အချက်အလက်များကို ပြည့်စုံစွာ ဖြည့်စွက်ပါ။
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-6 py-4">
-              {/* Title & Category */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="title">Job Title</Label>
-                  <Input id="title" placeholder="e.g. Senior Backend Developer" />
+            <form onSubmit={handleSubmit}>
+              <DialogHeader>
+                <DialogTitle>Create Job Posting</DialogTitle>
+                <DialogDescription>
+                  အလုပ်ခေါ်စာအသစ်အတွက် အချက်အလက်များကို ပြည့်စုံစွာ ဖြည့်စွက်ပါ။
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="grid gap-6 py-4">
+                {/* Title & Category */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="title">Job Title</Label>
+                    <Input 
+                      id="title" 
+                      required 
+                      placeholder="e.g. Senior Backend Developer" 
+                      value={formData.title}
+                      onChange={(e) => setFormData({...formData, title: e.target.value})}
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label>Category</Label>
+                    <Select onValueChange={(val) => setFormData({...formData, category: val})}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="it">IT / Software</SelectItem>
+                        <SelectItem value="marketing">Marketing</SelectItem>
+                        <SelectItem value="finance">Finance</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
+
+                {/* Type, Salary & Posts */}
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="grid gap-2">
+                    <Label>Job Type</Label>
+                    <Select onValueChange={(val) => setFormData({...formData, jobType: val})}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="FullTime">Full-Time</SelectItem>
+                        <SelectItem value="PartTime">Part-Time</SelectItem>
+                        <SelectItem value="Remote">Remote</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="salary">Salary (MMK)</Label>
+                    <Input 
+                      id="salary" 
+                      type="number" 
+                      placeholder="1200000" 
+                      value={formData.salary}
+                      onChange={(e) => setFormData({...formData, salary: e.target.value})}
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="posts">Num of Posts</Label>
+                    <Input 
+                      id="posts" 
+                      type="number" 
+                      placeholder="5" 
+                      value={formData.posts}
+                      onChange={(e) => setFormData({...formData, posts: e.target.value})}
+                    />
+                  </div>
+                </div>
+
+                {/* Description */}
                 <div className="grid gap-2">
-                  <Label>Category</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="it">IT / Software</SelectItem>
-                      <SelectItem value="marketing">Marketing</SelectItem>
-                      <SelectItem value="finance">Finance</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Label htmlFor="desc">Description</Label>
+                  <Textarea 
+                    id="desc" 
+                    placeholder="အလုပ်အကြောင်းအရာ ဖော်ပြချက်..." 
+                    value={formData.description}
+                    onChange={(e) => setFormData({...formData, description: e.target.value})}
+                  />
+                </div>
+
+                {/* --- Requirements Section --- */}
+                <div className="grid gap-2">
+                  <Label htmlFor="req" className="text-primary font-bold italic">Requirements</Label>
+                  <Textarea 
+                    id="req" 
+                    className="min-h-[120px] border-primary/20"
+                    placeholder="- အနည်းဆုံး လုပ်ငန်းအတွေ့အကြုံ (၂) နှစ် ရှိရမည်။&#10;- Teamwork ကျွမ်းကျင်စွာ လုပ်ကိုင်နိုင်ရမည်။" 
+                    value={formData.requirements}
+                    onChange={(e) => setFormData({...formData, requirements: e.target.value})}
+                  />
+                </div>
+
+                {/* Address */}
+                <div className="grid gap-2">
+                  <Label htmlFor="address">Full Address (Optional)</Label>
+                  <Input 
+                    id="address" 
+                    placeholder="အမှတ် (၁၂၃)၊ လမ်း ၅၀..." 
+                    value={formData.address}
+                    onChange={(e) => setFormData({...formData, address: e.target.value})}
+                  />
                 </div>
               </div>
 
-              {/* Type, Salary & Posts */}
-              <div className="grid grid-cols-3 gap-4">
-                <div className="grid gap-2">
-                  <Label>Job Type</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="fulltime">Full-Time</SelectItem>
-                      <SelectItem value="parttime">Part-Time</SelectItem>
-                      <SelectItem value="remote">Remote</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="salary">Salary (MMK)</Label>
-                  <Input id="salary" type="number" placeholder="1200000" />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="posts">Num of Posts</Label>
-                  <Input id="posts" type="number" placeholder="5" />
-                </div>
-              </div>
-
-              {/* Description & Requirements */}
-              <div className="grid gap-2">
-                <Label htmlFor="desc">Description</Label>
-                <Textarea id="desc" placeholder="အလုပ်အကြောင်းအရာ ဖော်ပြချက်..." />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="req">Requirements</Label>
-                <Textarea id="req" placeholder="လိုအပ်ချက်များ (Skills, Experience...)" />
-              </div>
-
-              {/* Address */}
-              <div className="grid gap-2">
-                <Label htmlFor="address">Full Address (Optional)</Label>
-                <Input id="address" placeholder="အမှတ် (၁၂၃)၊ လမ်း ၅၀..." />
-              </div>
-            </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-              <Button type="submit">Create Posting</Button>
-            </DialogFooter>
+              <DialogFooter>
+                <Button variant="outline" type="button" onClick={() => setOpen(false)}>Cancel</Button>
+                <Button type="submit">Create Posting</Button>
+              </DialogFooter>
+            </form>
           </DialogContent>
         </Dialog>
       </div>
 
-      {/* --- Jobs Table --- */}
-      <div className="rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden">
+      {/* --- Jobs Table Section --- */}
+      <div className="rounded-xl border bg-card shadow-sm overflow-x-auto">
         <Table>
-          <TableHeader className="bg-muted/50">
+          <TableHeader className="bg-muted/50 font-bold">
             <TableRow>
               <TableHead className="w-[250px]">Job Info</TableHead>
               <TableHead>Company & Category</TableHead>
@@ -164,7 +223,6 @@ export const Jobs = () => {
                   <span className="font-bold text-foreground">Frontend Engineer</span>
                   <div className="flex gap-2">
                     <Badge variant="outline" className="text-[10px] uppercase font-bold py-0">Full-Time</Badge>
-                    <span className="text-[10px] text-muted-foreground">v1.0</span>
                   </div>
                 </div>
               </TableCell>
@@ -183,7 +241,7 @@ export const Jobs = () => {
                   <div className="flex items-center gap-1.5">
                     <MapPin className="h-3.5 w-3.5 text-red-500" /> Yangon
                   </div>
-                  <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-medium">
+                  <div className="flex items-center gap-1.5 text-emerald-600 font-medium">
                     <DollarSign className="h-3.5 w-3.5" /> 1.5M MMK
                   </div>
                 </div>
@@ -195,7 +253,7 @@ export const Jobs = () => {
                 </div>
               </TableCell>
               <TableCell>
-                <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20 transition-colors">
+                <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20">
                   Active
                 </Badge>
               </TableCell>
@@ -211,7 +269,7 @@ export const Jobs = () => {
                     <DropdownMenuItem>View Applications</DropdownMenuItem>
                     <DropdownMenuItem>Edit Posting</DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className="text-destructive">Delete Job</DropdownMenuItem>
+                    <DropdownMenuItem className="text-destructive font-bold">Delete Job</DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </TableCell>

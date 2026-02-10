@@ -11,7 +11,7 @@ const spotlightJobs = [
   { id: 105, title: "Product Designer", company: "Bright Labs", location: "Singapore", type: "Contract", logo: "hello" },
   { id: 106, title: "Senior Backend Engineer", company: "CloudCore", location: "Berlin, Germany", type: "Full Time", logo: "hello" },
 ]
-
+  
 export function SpotlightJobs() {
   const { theme } = useTheme()
 
