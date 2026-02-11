@@ -26,7 +26,6 @@ export const setRefreshTokenCookie = (res: Response, refreshToken: string) => {
 export const verifyAccessToken = (token: string): TokenPayload => {
   try {
     const decoded = jwt.verify(token, dbConfig.access_secret) as any;
-    console.log("Decoded raw data:", decoded);
     if (decoded && decoded.id) {
       return { id: decoded.id, name: decoded.name, email: decoded.email };
     }

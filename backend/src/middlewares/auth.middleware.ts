@@ -16,17 +16,17 @@ export class AuthMiddleware {
     try {
       const userData = verifyAccessToken(accessToken);
 
-      req.id = userData.id;
-      req.userName = userData.name;
-      req.userEmail = userData.email;
+      req.user = {
+        id: userData.id,
+        name: userData.name,
+        email: userData.email,
+      };
 
-      if (!req.id) {
-        throw new Error('User ID missing from token');
+      if (!req.user.id) {
+        throw new Error("User ID missing from token");
       }
       return next();
     } catch (err: any) {
-      console.log("Verify Error Name:", err.name);
-      console.log("Verify Error Message:", err.message);
       res.status(HTTP_STATUS.UNAUTHORIZED).json({ message: 'Access token expired or invalid' });
     }
   };

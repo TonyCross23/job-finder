@@ -38,7 +38,6 @@ export class AuthController {
 
   refresh = catchAsync(async (req: Request, res: Response) => {
     const refreshToken = req.cookies.refreshToken;
-    console.log("refresh", refreshToken)
     const device = req.headers['user-agent'] || 'unknown device';
     if (!refreshToken) throw new AppError('Refresh token required', 400);
 
