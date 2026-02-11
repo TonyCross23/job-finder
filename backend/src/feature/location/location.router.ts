@@ -7,7 +7,12 @@ import { locationSchema } from '../../schemas/location/location.validation';
 const locationRoute = Router();
 const { locationController } = container;
 
-locationRoute.post('/', authMiddleware.authenticate, validation(locationSchema), locationController.create);
+locationRoute.post(
+  '/',
+  authMiddleware.authenticate,
+  validation(locationSchema),
+  locationController.create,
+);
 locationRoute.get('/', authMiddleware.authenticate, locationController.getAll);
 locationRoute.get('/:id', authMiddleware.authenticate, locationController.getById);
 locationRoute.put('/:id', authMiddleware.authenticate, locationController.update);

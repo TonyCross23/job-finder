@@ -18,38 +18,27 @@ export const setRefreshTokenCookie = (res: Response, refreshToken: string) => {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
-    path: "/",
+    path: '/',
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   });
-};  
+};
 
 export const verifyAccessToken = (token: string): TokenPayload => {
-  try {
-    const decoded = jwt.verify(token, dbConfig.access_secret) as any;
-    if (decoded && decoded.id) {
-      return { id: decoded.id, name: decoded.name, email: decoded.email };
-    }
+  const decoded = jwt.verify(token, dbConfig.access_secret) as any;
 
-    if (decoded && decoded.data && decoded.data.id) {
-      return {
-        id: decoded.data.id,
-        name: decoded.data.name,
-        email: decoded.data.email
-      };
-    }
-
-    if (decoded && decoded.payload && decoded.payload.id) {
-      return {
-        id: decoded.payload.id,
-        name: decoded.payload.name,
-        email: decoded.payload.email
-      };
-    }
-
-    throw new Error('Invalid token payload');
-  } catch (error) {
-    throw error
+  if (decoded?.id) {
+    return { id: decoded.id, name: decoded.name, email: decoded.email };
   }
+
+  if (decoded?.data?.id) {
+    return { id: decoded.data.id, name: decoded.data.name, email: decoded.data.email };
+  }
+
+  if (decoded?.payload?.id) {
+    return { id: decoded.payload.id, name: decoded.payload.name, email: decoded.payload.email };
+  }
+
+  throw new Error('Invalid token payload');
 };
 
 

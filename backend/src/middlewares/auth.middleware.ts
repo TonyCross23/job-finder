@@ -23,10 +23,10 @@ export class AuthMiddleware {
       };
 
       if (!req.user.id) {
-        throw new Error("User ID missing from token");
+        throw new Error('User ID missing from token');
       }
       return next();
-    } catch (err: any) {
+    } catch {
       res.status(HTTP_STATUS.UNAUTHORIZED).json({ message: 'Access token expired or invalid' });
     }
   };

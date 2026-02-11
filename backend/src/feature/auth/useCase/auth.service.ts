@@ -10,7 +10,7 @@ import { ResetPasswordDTO } from '../dto/forgot-password.dto';
 import { signAccessToken } from '../../../utils/jwt';
 
 export class AuthService implements IAuthService {
-  constructor(private repo: IAuthRepository) { }
+  constructor(private repo: IAuthRepository) {}
   async sendVerificationCode(email: string): Promise<{ message: string }> {
     const existingUser = await this.repo.findUserByEmail(email);
     if (existingUser) throw new AppError('Email already registered', 409);
@@ -121,7 +121,7 @@ export class AuthService implements IAuthService {
     const accessToken = signAccessToken({
       id: user.id,
       name: user.username,
-      email: user.email
+      email: user.email,
     });
     const refreshToken = crypto.randomBytes(32).toString('hex');
 

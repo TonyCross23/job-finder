@@ -11,19 +11,19 @@ const { authController } = container;
 
 authRoute.post('/code', authController.sendCode);
 authRoute.post('/register', validation(RegisterSchema), authController.register);
-authRoute.post('/login',  authController.login);
+authRoute.post('/login', authController.login);
 authRoute.post('/refresh', authController.refresh);
 authRoute.post('/logout', authMiddleware.authenticate, authController.logout);
 authRoute.post(
   '/forgot-password',
   validation(ForgotSchema),
-  
+
   authController.forgotPassword,
 );
 authRoute.post(
   '/reset-password',
   validation(ResetPasswordSchema),
-  
+
   authController.resetPassword,
 );
 

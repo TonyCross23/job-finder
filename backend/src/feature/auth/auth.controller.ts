@@ -6,7 +6,7 @@ import { IAuthService } from './useCase/auth.service.interface';
 import { Request, Response } from 'express';
 
 export class AuthController {
-  constructor(private service: IAuthService) { }
+  constructor(private service: IAuthService) {}
 
   sendCode = catchAsync(async (req: Request, res: Response) => {
     console.log('DEBUG: Request Body is', req.body);

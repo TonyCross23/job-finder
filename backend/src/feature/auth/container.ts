@@ -1,5 +1,4 @@
 import { prisma } from '../../database/prisma';
-import { AuthMiddleware } from '../../middlewares/auth.middleware';
 import { AuthController } from './auth.controller';
 import { AuthRepository } from './infrastructure/auth.repository';
 import { AuthService } from './useCase/auth.service';

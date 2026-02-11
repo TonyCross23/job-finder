@@ -1,7 +1,6 @@
-import { AppError } from "../../../errors/httpErrors";
-import { ILocationRepository } from "../infrastructure/location.IRepository";
-import { Location } from "../location";
-
+import { AppError } from '../../../errors/httpErrors';
+import { ILocationRepository } from '../infrastructure/location.IRepository';
+import { Location } from '../location';
 
 export class LocationService {
   constructor(private locationRepo: ILocationRepository) {}

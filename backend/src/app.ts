@@ -20,7 +20,7 @@ app.use(compression());
 app.use(
   cors({
     origin: 'http://localhost:5173',
-    credentials: true, 
+    credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   }),
@@ -32,7 +32,7 @@ app.use(express.json());
 // URL encoded parser
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cookieParser())
+app.use(cookieParser());
 
 // Morgan → Pino → Winston
 app.use(morganMiddleware);

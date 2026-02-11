@@ -14,6 +14,7 @@ import { Users } from "./admin/pages/Users"
 import AdminCompanies from "./admin/pages/Companies"
 import { Locations } from "./admin/pages/Location"
 import ForgotPassword from "./pages/auth/ForgotPassword"
+import EditProfile from "./pages/EditProfile"
 
 function App() {
 
@@ -39,6 +40,7 @@ function App() {
             <Layout />
           </PrivateRoute>} >
           <Route path="/" element={<HomePage />} />
+          <Route path="/edit/profile/:id" element={<EditProfile/>}/>
         </Route>
       </Routes>
     </AuthProvider>

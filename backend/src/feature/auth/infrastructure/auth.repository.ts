@@ -1,5 +1,5 @@
 import { AppError } from '../../../errors/httpErrors';
-import { PrismaClient } from '../../../generated/prisma/client';
+import { Prisma, PrismaClient } from '../../../generated/prisma/client';
 import { redisClient } from '../../../utils/redis';
 import { CreateUserDTO, UserDTO, RefreshTokenDTO } from '../dto/auth.dto';
 import { IAuthRepository } from './auth.repository.interface';
@@ -52,15 +52,24 @@ export class AuthRepository implements IAuthRepository {
         createdAt: user.createdAt,
         roleId: user.roleId,
       };
-    } catch (err: any) {
-      if (err.code === 'P2002') {
-        throw new AppError('Email already exists', 409);
+    } catch (err) {
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === 'P2002') {
+          throw new AppError('Email already exists', 409);
+        }
       }
       throw err;
+
     }
   }
   async findUserById(id: string): Promise<UserDTO | null> {
-    const user = await this.prisma.user.findUnique({ where: { id } });
+    const user = await this.prisma.user.findUnique({ 
+      where: { id },
+      include: {
+        applicantProfile: true,
+        socialMedia: true
+      } 
+    });
 
     if (!user) return null;
 
@@ -99,7 +108,12 @@ export class AuthRepository implements IAuthRepository {
     await this.prisma.refreshToken.create({ data: { userId, device, token, expiresAt } });
     const ttlSeconds = Math.floor((expiresAt.getTime() - Date.now()) / 1000);
     if (ttlSeconds > 0) {
-      await redisClient.set(`refresh_token:${token}`, JSON.stringify({ userId, device }), 'EX', ttlSeconds);
+      await redisClient.set(
+        `refresh_token:${token}`,
+        JSON.stringify({ userId, device }),
+        'EX',
+        ttlSeconds,
+      );
     }
   }
   async findRefreshToken(token: string): Promise<RefreshTokenDTO | null> {
@@ -122,7 +136,7 @@ export class AuthRepository implements IAuthRepository {
         token: dbToken.token,
         userId: dbToken.userId,
         device: dbToken.device,
-        expiresAt: dbToken.expiresAt
+        expiresAt: dbToken.expiresAt,
       };
     }
     return null;
