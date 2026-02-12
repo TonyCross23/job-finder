@@ -1,7 +1,7 @@
 import catchAsync from '../../config/catchAsync';
 import { HTTP_STATUS } from '../../config/httpStatusCode';
 import { AppError } from '../../errors/httpErrors';
-import { setRefreshTokenCookie } from '../../utils/jwt';
+import { clearRefreshTokenCookie, setRefreshTokenCookie } from '../../utils/jwt';
 import { IAuthService } from './useCase/auth.service.interface';
 import { Request, Response } from 'express';
 
@@ -49,7 +49,12 @@ export class AuthController {
   logout = catchAsync(async (req: Request, res: Response) => {
     const { token } = req.body;
     const device = req.headers['user-agent'] || 'unknown device';
-    await this.service.loguot(token, device);
+    
+    if(token) {
+      await this.service.loguot(token, device);
+    }
+
+    clearRefreshTokenCookie(res);
     res.status(HTTP_STATUS.OK).json({ message: 'Logout succefully' });
   });
 

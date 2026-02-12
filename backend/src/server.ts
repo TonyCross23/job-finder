@@ -2,10 +2,13 @@ import app from './app';
 import http from 'http';
 import { logger } from './middlewares/logger';
 import { dbConfig } from './config/db';
+import { initCronJobs } from './cron';
 
 const PORT = dbConfig.hport;
 
 const server = http.createServer(app);
+
+initCronJobs();
 
 server.listen(PORT, () => {
   logger.info(`🚀 Server running on http://localhost:${PORT}`);

@@ -23,22 +23,26 @@ export const setRefreshTokenCookie = (res: Response, refreshToken: string) => {
   });
 };
 
+// logout
+export const clearRefreshTokenCookie = (res: Response) => {
+  res.clearCookie('refreshToken', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+  });
+};
+
 export const verifyAccessToken = (token: string): TokenPayload => {
-  const decoded = jwt.verify(token, dbConfig.access_secret) as any;
-
-  if (decoded?.id) {
+  try {
+    const decoded = jwt.verify(token, dbConfig.access_secret) as any;
+    if (!decoded.id || !decoded.email) {
+      throw new Error('Invalid token payload');
+    }
     return { id: decoded.id, name: decoded.name, email: decoded.email };
+  } catch (error) {
+    throw new Error('Token verification failed');
   }
-
-  if (decoded?.data?.id) {
-    return { id: decoded.data.id, name: decoded.data.name, email: decoded.data.email };
-  }
-
-  if (decoded?.payload?.id) {
-    return { id: decoded.payload.id, name: decoded.payload.name, email: decoded.payload.email };
-  }
-
-  throw new Error('Invalid token payload');
 };
 
 

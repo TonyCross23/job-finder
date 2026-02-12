@@ -22,7 +22,7 @@ api.interceptors.request.use(
     async (config) => {
         let token = localStorage.getItem('accessToken');
 
-        if (token && !config.url?.includes('/auth/refresh')) {
+        if (token && !config.url?.includes('/auth/refresh') && !config.url?.includes('/auth/logout')) {
             const decoded: any = jwtDecode(token);
             const currentTime = Date.now() / 1000;
 

@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import { loginAPI } from '../api/auth.api';
+import { loginAPI, logoutAPI } from '../api/auth.api';
 import { jwtDecode } from 'jwt-decode';
 
 interface UserType {
@@ -52,9 +52,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const logout = async () => {
-        localStorage.removeItem('accessToken');
-        setUser(null);
-        window.location.href = '/login';
+        try {
+            await logoutAPI()
+        } catch (error) {
+            console.error("Logout API error:", error);
+        } finally {
+            localStorage.removeItem('accessToken');
+            setUser(null);
+            window.location.href = '/login';
+        }
     };
 
     return (

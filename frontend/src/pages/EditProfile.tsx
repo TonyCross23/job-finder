@@ -6,11 +6,13 @@ import api from "@/api/axios";
 import { toast } from "sonner";
 import { calculateProfilePercentage } from "@/utils/profileCompletion";
 import SocialMediaForm from "@/components/SocialMediaForm";
+// import ResumeForm from "@/components/ResumeForm";
 
 export default function EditProfilePage() {
   const { user } = useAuth();
   const [profileData, setProfileData] = useState<any>(null);
-  const [socialLinks, setSocialLinks] = useState<any[]>([]); 
+  const [socialLinks, setSocialLinks] = useState<any[]>([]);
+  // const [resumeData, setResumeData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -18,11 +20,13 @@ export default function EditProfilePage() {
     try {
       const [profileRes, socialRes] = await Promise.all([
         api.get("/applicantprofile/me"),
-        api.get("/socialmedia")
+        api.get("/socialmedia"),
+        // api.get("/resume/me")
       ]);
-      
+
       setProfileData(profileRes.data);
-      setSocialLinks(socialRes.data.result || []); 
+      setSocialLinks(socialRes.data.result || []);
+      // setResumeData(resumeRes.data);
     } catch (error) {
       console.log("No profile yet");
     } finally {
@@ -46,7 +50,7 @@ export default function EditProfilePage() {
     try {
       await api.post("/users/upload-photo", formData);
       toast.success("Profile photo updated!");
-      window.location.reload(); 
+      window.location.reload();
     } catch (err) {
       toast.error("Upload failed");
     }
@@ -96,9 +100,11 @@ export default function EditProfilePage() {
 
       {/* Forms Section */}
       <div className="md:col-span-2 space-y-6">
+        {/* <section className="bg-card p-2 rounded-2xl border shadow-sm border-primary/20">
+          <ResumeForm initialData={resumeData} onUpdate={fetchData} />
+        </section> */}
         <section className="bg-card p-6 rounded-2xl border shadow-sm">
-          <h3 className="font-semibold text-xl mb-6">Personal Details</h3>
-          <BasicInfoForm initialData={profileData} />
+          <BasicInfoForm initialData={profileData} onUpdate={fetchData} />
         </section>
 
         <section className="bg-card p-6 rounded-2xl border shadow-sm">

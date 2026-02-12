@@ -25,6 +25,7 @@ export class AuthRepository implements IAuthRepository {
     const ttl = Math.floor((expiresAt.getTime() - Date.now()) / 1000);
     await redisClient.set(`email_code:${email}`, code, 'EX', ttl);
   }
+  
   async getEmailCode(email: string): Promise<string | null> {
     return await redisClient.get(`email_code:${email}`);
   }
