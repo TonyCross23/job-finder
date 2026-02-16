@@ -17,8 +17,6 @@ import { useAuth } from "@/context/auth.context";
 export const Topbar = () => {
     const {user, logout} = useAuth()
     
-    const initial = user?.charAt(0).toUpperCase();
-    
     return (
         <header className="flex h-16 shrink-0 items-center justify-between gap-2 border-b px-4 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
             <div className="flex items-center gap-2">
@@ -45,7 +43,7 @@ export const Topbar = () => {
                         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                             <Avatar className="h-8 w-8">
                                 <AvatarImage src="/avatar.png" alt="Profile" />
-                                <AvatarFallback>{initial}</AvatarFallback>
+                                <AvatarFallback>{user?.name}</AvatarFallback>
                             </Avatar>
                         </Button>
                     </DropdownMenuTrigger>

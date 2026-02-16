@@ -1,6 +1,19 @@
 version: "3.8"
 
 services:
+  db:
+    image: postgres:15-alpine
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: tonyuser
+      POSTGRES_PASSWORD: tonypassword
+      POSTGRES_DB: my_go_app
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   redis:
     image: redis:7
     container_name: redis
@@ -12,3 +25,4 @@ services:
 
 volumes:
   redis_data:
+  postgres_data:
