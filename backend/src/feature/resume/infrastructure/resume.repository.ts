@@ -37,4 +37,11 @@ export class ResumeRepository implements IResumeRepository {
         await this.prisma.resume.delete({ where: { id: resumeId } });
     }
 
+    async findByUserId(userId: string): Promise<Resume[]> {
+        return await this.prisma.resume.findMany({
+            where: { userId: userId },
+            orderBy: { createdAt: 'desc' }
+        }) as Resume[]
+    }
+
 }

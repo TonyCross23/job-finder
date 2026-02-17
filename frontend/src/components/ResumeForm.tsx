@@ -17,7 +17,8 @@ export default function ResumeForm({ initialData, onUpdate }: { initialData: any
     }
 
     const formData = new FormData();
-    formData.append("resume", file);
+    // highlight-next-line
+    formData.append("file", file);
 
     try {
       setUploading(true);
@@ -25,8 +26,8 @@ export default function ResumeForm({ initialData, onUpdate }: { initialData: any
       toast.success("Resume uploaded successfully!");
       setIsEditing(false);
       await onUpdate();
-    } catch (err) {
-      toast.error("Upload failed");
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || "Upload failed");
     } finally {
       setUploading(false);
     }
@@ -43,10 +44,9 @@ export default function ResumeForm({ initialData, onUpdate }: { initialData: any
     }
   };
 
-  // View Mode
   if (!isEditing && initialData) {
     return (
-      <div className="space-y-4 text-left">
+      <div className="space-y-4 text-left p-6 bg-card rounded-2xl border shadow-sm border-primary/20">
         <div className="flex justify-between items-center">
           <h3 className="font-semibold text-xl">Resume / CV</h3>
           <Button variant="outline" size="sm" onClick={() => setIsEditing(true)}>Change File</Button>
@@ -56,7 +56,9 @@ export default function ResumeForm({ initialData, onUpdate }: { initialData: any
             <FileCheck size={24} />
           </div>
           <div className="flex-1 truncate">
-            <p className="font-medium truncate">{initialData.filePath.split('/').pop()}</p>
+            <a href={initialData.filePath} target="_blank" rel="noreferrer" className="font-medium truncate block hover:underline">
+              {initialData.fileName || initialData.filePath.split('/').pop()}
+            </a>
             <p className="text-xs text-muted-foreground">Uploaded on {new Date(initialData.createdAt).toLocaleDateString()}</p>
           </div>
           <Button variant="ghost" size="icon" className="text-destructive hover:bg-destructive/10" onClick={handleDelete}>
@@ -67,32 +69,18 @@ export default function ResumeForm({ initialData, onUpdate }: { initialData: any
     );
   }
 
-  // Edit/Upload Mode
   return (
-    <div className="space-y-4 text-left">
+    <div className="space-y-4 text-left p-6 bg-card rounded-2xl border shadow-sm">
       <div className="flex justify-between items-center">
         <h3 className="font-semibold text-xl">Upload Resume</h3>
         {initialData && (
           <Button variant="ghost" size="sm" onClick={() => setIsEditing(false)}><X size={18} /></Button>
         )}
       </div>
-      
       <div className="relative group">
-        <input 
-          type="file" 
-          id="resume-upload" 
-          className="hidden" 
-          onChange={handleFileUpload} 
-          accept=".pdf"
-          disabled={uploading}
-        />
-        <label 
-          htmlFor="resume-upload"
-          className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-xl cursor-pointer hover:bg-muted/50 transition-colors border-muted-foreground/20"
-        >
-          {uploading ? (
-            <Loader2 className="animate-spin text-primary" size={32} />
-          ) : (
+        <input type="file" id="resume-upload" className="hidden" onChange={handleFileUpload} accept=".pdf" disabled={uploading} />
+        <label htmlFor="resume-upload" className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-xl cursor-pointer hover:bg-muted/50 transition-colors border-muted-foreground/20">
+          {uploading ? <Loader2 className="animate-spin text-primary" size={32} /> : (
             <>
               <Upload className="text-muted-foreground mb-2" size={32} />
               <p className="text-sm font-medium">Click to upload your CV (PDF)</p>

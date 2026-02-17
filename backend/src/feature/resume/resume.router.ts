@@ -6,6 +6,7 @@ import { authMiddleware } from "../../middlewares/auth.middleware";
 const resumeRouter = Router()
 const {resumeController} = container
 
+resumeRouter.get("/", authMiddleware.authenticate, resumeController.getMyResumes)
 resumeRouter.post("/upload", authMiddleware.authenticate, uploadMiddleware.single('file'), resumeController.upload)
 resumeRouter.delete("/:id", authMiddleware.authenticate, resumeController.delete)
 

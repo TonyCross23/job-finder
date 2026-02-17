@@ -5,12 +5,19 @@ import { ResumeService } from "./useCase/resume.service";
 
 export class ResumeController {
 
-    constructor(private resumeService: ResumeService) {}
+    constructor(private resumeService: ResumeService) { }
+
+    getMyResumes = catchAsync(async (req: Request, res: Response) => {
+        const userId = req.user!.id;
+        const resumes = await this.resumeService.getResumesByUserId(userId);
+
+        res.status(HTTP_STATUS.OK).json(resumes);
+    });
 
     upload = catchAsync(async (req: Request, res: Response) => {
         const userId = req.user?.id
-        
-        if(!userId) {
+
+        if (!userId) {
             return res.status(HTTP_STATUS.NOT_FOUND).json({ error: "user id not fund" });
         }
 
@@ -28,9 +35,9 @@ export class ResumeController {
         res.status(HTTP_STATUS.CREATED).json(result)
     })
 
-    delete = catchAsync(async(req: Request, res: Response) => {
+    delete = catchAsync(async (req: Request, res: Response) => {
         const id = req.params.id as string
         await this.resumeService.deleteResume(id)
-        res.status(HTTP_STATUS.OK).json({message: "Delete succefully"})
+        res.status(HTTP_STATUS.OK).json({ message: "Delete succefully" })
     })
 }

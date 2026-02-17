@@ -6,27 +6,31 @@ import api from "@/api/axios";
 import { toast } from "sonner";
 import { calculateProfilePercentage } from "@/utils/profileCompletion";
 import SocialMediaForm from "@/components/SocialMediaForm";
-// import ResumeForm from "@/components/ResumeForm";
+import ResumeForm from "@/components/ResumeForm";
 
 export default function EditProfilePage() {
   const { user } = useAuth();
   const [profileData, setProfileData] = useState<any>(null);
   const [socialLinks, setSocialLinks] = useState<any[]>([]);
-  // const [resumeData, setResumeData] = useState<any>(null);
+  const [resumeData, setResumeData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const fetchData = async () => {
     try {
-      const [profileRes, socialRes] = await Promise.all([
+      const [profileRes, socialRes, resumeRes] = await Promise.all([
         api.get("/applicantprofile/me"),
         api.get("/socialmedia"),
-        // api.get("/resume/me")
+        api.get("/resume")
       ]);
 
       setProfileData(profileRes.data);
       setSocialLinks(socialRes.data.result || []);
-      // setResumeData(resumeRes.data);
+      if (resumeRes.data && resumeRes.data.length > 0) {
+        setResumeData(resumeRes.data[0]);
+      } else {
+        setResumeData(null);
+      }
     } catch (error) {
       console.log("No profile yet");
     } finally {
@@ -100,9 +104,9 @@ export default function EditProfilePage() {
 
       {/* Forms Section */}
       <div className="md:col-span-2 space-y-6">
-        {/* <section className="bg-card p-2 rounded-2xl border shadow-sm border-primary/20">
+        <section className="bg-card p-2 rounded-2xl border shadow-sm border-primary/20">
           <ResumeForm initialData={resumeData} onUpdate={fetchData} />
-        </section> */}
+        </section>
         <section className="bg-card p-6 rounded-2xl border shadow-sm">
           <BasicInfoForm initialData={profileData} onUpdate={fetchData} />
         </section>
