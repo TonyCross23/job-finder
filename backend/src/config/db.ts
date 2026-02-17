@@ -12,4 +12,6 @@ export const dbConfig = {
   access_secret: process.env.ACCESS_SECRET! || 'super-secret-access-key',
   gmail_user: process.env.GMAIL_USER!,
   gmail_password: process.env.GMAIL_APP_PASSWORD!,
+  supabse_db: process.env.SUPABASE_URL!,
+  supabase_role_key: process.env.SUPABASE_SERVICE_ROLE_KEY!,
 };

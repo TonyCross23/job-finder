@@ -1,4 +1,6 @@
-export interface ISocialMediaRepository {
-  deleteByUserId(userId: string, tx?: any): Promise<any>;
-  createMany(userId: string, links: { link: string }[], tx?: any): Promise<any>;
+import { Resume } from "../dto/create.resume";
+
+export interface IResumeRepository {
+  create(userId: string, fileName: string, fileBuffer: Buffer): Promise<Resume>;
+  delete(resumeId: string): Promise<void>;
 }
