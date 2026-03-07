@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import catchAsync from '../../../config/catchAsync';
-import { LocationService } from './location.service';
 import { HTTP_STATUS } from '../../../config/httpStatusCode';
+import { LocationService } from '../useCase/location.service';
 
 export class LocationController {
   constructor(private service: LocationService) {}

@@ -4,6 +4,7 @@ import locationRoute from '../feature/location/location.router';
 import applicantProfileRoute from '../feature/applicantProfile/applicantProfile.router';
 import socialRoute from '../feature/socialmedia/social.router';
 import resumeRouter from '../feature/resume/resume.router';
+import jobCategoryRoute from '../feature/jobCategory/jobCategory.router';
 
 const router = Router();
 
@@ -12,5 +13,6 @@ router.use('/location', locationRoute);
 router.use('/applicantprofile', applicantProfileRoute);
 router.use('/socialmedia', socialRoute);
 router.use("/resume", resumeRouter)
+router.use("/job/category", jobCategoryRoute)
 
 export default router;
